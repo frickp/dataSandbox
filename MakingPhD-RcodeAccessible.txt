@@ -1,0 +1,40 @@
+# I can get things pretty close to operational, but I need to pull all the files by getURL, instead of setwd
+
+#This one works!
+
+
+importPackages = function(pkgName)
+{
+	if(eval(parse(text=paste0('library(',pkgName,',logical.return=T,quietly=T)'))))
+	{
+		print(paste0(pkgName,': ','found'))
+	} else {
+		print(paste(pkgName,'not found'))
+		if(readline("Type T to install package or anything else to abort")=='T'){
+			print(paste('not found',pkgName))
+			install.packages(pkgName)
+			}
+		else {
+			print('Package install aborted. Type T to install')
+		}
+	}
+}
+
+baseURL = c("https://raw.github.com/--username--/--repo-name--/master/")
+
+mybaseURL='https://raw.githubusercontent.com/frickp/cFPpaper-Rcode/master/Data%20used%20for%20figures%20(pulled%20by%20R)/'
+
+ColonyAssayData.R
+
+source(textConnection(getURL(paste0(baseURL, "path-to-scripts/script-name.R"))))
+
+source(textConnection(getURL(mybaseURL)))
+
+source(textConnection(getURL(paste0(mybaseURL,'ColonyAssayData.R'))))
+
+
+read.csv(textConnection(getURL(paste0(mybaseURL,'BP_SKMEL5.csv'))))
+
+https://rawgit.com/frickp/cFPpaper-Rcode/blob/master/Data%20used%20for%20figures%20(pulled%20by%20R)/BP_SKMEL5.csv
+
+
