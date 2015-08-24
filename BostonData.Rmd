@@ -1,0 +1,62 @@
+---
+title: "MarkdownTry"
+output: html_document
+---
+#Boston dataset
+First do a set of linear models to see which predictors are most significant
+
+```{r}
+library(MASS)
+attach(Boston)
+nm = names(Boston)
+nm = nm[1:(length(nm)-1)]
+
+#looks like lm null model in R is: lm(y ~ 1)
+# Store the linear models like this M[[1]] <- model1; M[[2]] <- model2 ...
+
+# First, choose the predictor with the highest R^2 value
+statsum<-data.frame(pred=rep(NA,length(nm)),R2=numeric(length(nm)))
+for (i in 1:length(nm))
+{
+  fit   <- lm(medv ~ eval(parse(text=nm[i])))
+  statsum$pred[i]=nm[i]
+  statsum$R2[i]=summary(fit)$r.squared
+}
+
+highR2 = statsum$pred[statsum$R2==max(statsum$R2)]
+print(
+  paste(
+    'The best predictor is',
+    statsum$pred[statsum$R2==max(statsum$R2)],
+    'with and R2 value of',
+    round(statsum$R2[statsum$R2==max(statsum$R2)],2)
+    )
+  )
+
+```
+
+#Next, find out the variable that additively makes the model most predictice
+
+
+```{r}
+nm = nm[nm!=highR2]
+
+statsum=data.frame(pred=rep(NA,length(nm)),pAnova=numeric(length(nm)))
+
+for (i in 1:length(nm))
+{
+  fit = lm(medv ~ eval(parse(text=highR2)))
+  fit2 = lm(medv ~ eval(parse(text=highR2)) + eval(parse(text=nm[i])))
+  statsum$pred[i]   = nm[i]
+  statsum$pAnova[i] = anova(fit,fit2)[[6]][2]
+}
+# Add the most significant predictor (by R^2) in each round
+
+
+```
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
