@@ -12,9 +12,29 @@ nm = names(Boston)
 nm = nm[nm!='medv']
 # And then, I need to selectively remove the variable names from nm as the selection iterates
 
+
+
+
+rev.model=steo(object=)
+
+
 # Create a list that contains all of the predictors chosen
 M <- ('lstat')
 M <- append(M,'secondPred')
+
+ept=function(x)
+{
+  eval(parse(text=x))
+}
+
+ept(nm[1:4])
+
+ #M=character()
+M=nm[1]
+for (i in 2:(length(nm)))
+  M=paste(M,nm[i],sep='+')
+
+
 
 # Looks like lm null model in R is: lm(y ~ 1)
 # So, call the name of the first model '1'
@@ -44,6 +64,20 @@ print(
 
 #Next, find out the variable that additively makes the model most predictice
 
+Do forward, reverse, and mixed selection on a linear model.
+http://stackoverflow.com/questions/22913774/forward-stepwise-regression
+
+```{r}
+min.model=lm(medv ~ 1)
+max.model=lm(medv~.,data=Boston)
+
+fwd.model=step(object=min.model,scope=formula(max.model),direction='forward')
+
+rev.model=step(object=max.model,scope=formula(min.model),direction='backward')
+
+fwd.model=step(object=min.model,scope=formula(max.model),direction='both')
+
+```
 
 ```{r}
 nm = nm[nm!=highR2]
