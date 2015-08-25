@@ -9,12 +9,19 @@ First do a set of linear models to see which predictors are most significant
 library(MASS)
 attach(Boston)
 nm = names(Boston)
-nm = nm[1:(length(nm)-1)]
+nm = nm[nm!='medv']
+# And then, I need to selectively remove the variable names from nm as the selection iterates
 
-#looks like lm null model in R is: lm(y ~ 1)
+# Create a list that contains all of the predictors chosen
+M <- ('lstat')
+M <- append(M,'secondPred')
+
+# Looks like lm null model in R is: lm(y ~ 1)
+# So, call the name of the first model '1'
 # Store the linear models like this M[[1]] <- model1; M[[2]] <- model2 ...
 
 # First, choose the predictor with the highest R^2 value
+
 statsum<-data.frame(pred=rep(NA,length(nm)),R2=numeric(length(nm)))
 for (i in 1:length(nm))
 {
@@ -55,6 +62,8 @@ for (i in 1:length(nm))
 
 ```
 
+
+This is a pre-loaded example showing how you can suppress the code used to generate the plots
 ```{r, echo=FALSE}
 plot(cars)
 ```
