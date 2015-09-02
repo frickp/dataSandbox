@@ -13,29 +13,6 @@ nm = nm[nm!='medv']
 # And then, I need to selectively remove the variable names from nm as the selection iterates
 
 
-
-
-rev.model=steo(object=)
-
-
-# Create a list that contains all of the predictors chosen
-M <- ('lstat')
-M <- append(M,'secondPred')
-
-ept=function(x)
-{
-  eval(parse(text=x))
-}
-
-ept(nm[1:4])
-
- #M=character()
-M=nm[1]
-for (i in 2:(length(nm)))
-  M=paste(M,nm[i],sep='+')
-
-
-
 # Looks like lm null model in R is: lm(y ~ 1)
 # So, call the name of the first model '1'
 # Store the linear models like this M[[1]] <- model1; M[[2]] <- model2 ...
