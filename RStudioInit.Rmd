@@ -1,7 +1,10 @@
----
-title: "Learning to display R-code online"
-output: html_document
----
+Title: RStudio First Try
+Date: 2015-09-04
+Category: blog
+Tags: Rstudio
+Slug: getting-started-with-RStudio
+Author: Peter Frick
+Summary: Initializing my first R-studio
 
 The goal of this exercise is to learn how to embed an R Markdown document in a website.
 
@@ -11,37 +14,31 @@ five + five = `5+5`
 Next, I want to generate some code to illustrate plotting. First, just consider a logistic equation, $$y=log(x)$$
 
 Because the y-value increases more slowly with increasing x, let's say this represents the law of diminishing returns
-
 ```{r,fig.width=3,fig.height=4}
 x1=1:100
 y=log(x1)
 plot(x1,y,main='Diminishing returns',xlab='Invested resources',ylab='Return on investment',font.lab=2)
 ```
 
-Okay, so the plot looks good now! Let's add some noise around the theoretical value to make it look more like real-world data
+Okay, so the plot looks good now! Let's add varying amounts of noise around the theoretical value to make it look more like real-world data.
 
 ```{r,fig.width=10,fig.height=4}
-#Let's keep x-values the same
-#x1=1:100
-
-#Now, update y values to include noise
+# update y values to include noise
 par(mfrow=c(1,3))
 y=log(x1) + rnorm(length(x1),sd=0.1)
 y2=log(x1) + rnorm(length(x1),sd=0.3)
 y3=log(x1) + rnorm(length(x1),sd=1)
-plot(x1,y,main='Diminishing returns',xlab='Invested resources',ylab='Return on investment',font.lab=2)
-plot(x1,y2)
-plot(x1,y3)
+plot(x1,y,main='Low noise',xlab='Invested resources',ylab='Return on investment',font.lab=2,cex.lab=1.8,cex.main=2)
+plot(x1,y2,main='Med noise',xlab='Invested resources',ylab='Return on investment',font.lab=2,cex.lab=1.8,cex.main=2)
+plot(x1,y3,main='High noise',xlab='Invested resources',ylab='Return on investment',font.lab=2,cex.lab=1.8,cex.main=2)
 ```
-
 
 Okay, now let's try to fit the data using a linear model and the true form of the data to compute the errors.
 
 P.S., stackoverflow is really useful!
 http://stackoverflow.com/questions/11569068/fitting-logarithmic-curve-to-data-points-in-r
 
-```{r,fig.width=9,fig.height=8}
-#plot(x,y2,main='Diminishing returns',xlab='Invested resources',ylab='Return on investment',font.lab=2)
+```{r,fig.width=9,fig.height=4}
 
 pltFits=function(yvar=y2,xvar=x1)
 {
@@ -53,21 +50,30 @@ pltFits=function(yvar=y2,xvar=x1)
   lines(xvar,predict(logEst),lwd=3,col='blue',lty=2)
   f=function(x){log(x)}
   curve(f,from=min(xvar),to=max(xvar),add=T)
-  
+ }
+
   #I should plot the actual function in a solid line! Legend: linear/log estimates and true function
-  resMax = max(abs(linEst$residuals),abs(logEst$residuals))
-  plot(linEst$residuals,ylim=c(-resMax,resMax),col='red',main='Residuals',xlab='Invested resources',ylab='Residuals',font.lab=2)
-  points(logEst$residuals,ylim=c(-resMax,resMax),col='blue')
-  #barplot(summary(logEst)$r.squared,summary(linEst)$r.squared)
-  #Plot the true curves on top of the data
-}
-par(mfcol=c(2,3),cex.lab=1.4,cex.main=1.7)
+par(mfcol=c(1,3),cex.lab=1.4,cex.main=1.7)
 pltFits(y)
 pltFits(y2)
 pltFits(y3)
-
+#legend('topleft',)
 ```
 
+```{r,fig.width=9,fig.height=4}
+pltRes=function(yvar=y2,xvar=x1)
+  {
+  linEst=lm(yvar~xvar)
+  logEst=lm(yvar~log(xvar))
+  resMax = max(abs(linEst$residuals),abs(logEst$residuals))
+  plot(linEst$residuals,ylim=c(-resMax,resMax),col='red',main='Residuals',xlab='Invested resources',ylab='Residuals',font.lab=2)
+  points(logEst$residuals,ylim=c(-resMax,resMax),col='blue')
+}
+par(mfcol=c(1,3),cex.lab=1.4,cex.main=1.7)
+pltRes(y)
+pltRes(y2)
+pltRes(y3)
+```
 Looks like the two models cannot be distinguished in the limit of high noise, but can be in the low noise limit
 
 There we go! Now hopefully on to some more interesting stuff!
