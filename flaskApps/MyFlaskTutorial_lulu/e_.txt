@@ -1,0 +1,6 @@
+Name: e
+Age: 
+
+Do you like cupcakes?
+no
+
